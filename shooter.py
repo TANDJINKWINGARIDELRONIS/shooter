@@ -5,12 +5,12 @@ from game import Game
 
 #-----------------------------------------Generer la fenetre du jeu---------------------------------- 
 pygame.display.set_caption("Shooter")
-screen=pygame.display.set_mode((900,500))
+screen=pygame.display.set_mode((1080,720))
 
 #-----------------------------------------------charger l'image en fond d'ecran-------------------------- 
 background=pygame.image.load('assets/bg.jpg')
 
-#--------------------------------------------------------charger le jeu--------------------------------
+#----------------------------------------------charger le jeu--------------------------------
 game=Game()
 
 #varialble pour garder la fenetre ouverte
@@ -19,7 +19,7 @@ running=True
 while running :
     
     #application de l'arriere plan 
-    screen.blit(background,(0,-440))
+    screen.blit(background,(0,-200))
 
     #appliquer l'image du joueur(blit)
     screen.blit(game.player.image,game.player.rect)

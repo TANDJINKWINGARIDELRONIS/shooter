@@ -12,8 +12,8 @@ class player (pygame.sprite.Sprite):
         self.all_projectile=pygame.sprite.Group()
         self.image= pygame.image.load('assets/player.png')
         self.rect= self.image.get_rect() #utilisation de rect pour recuperer un rectagle sur l'interface
-        self.rect.x= 300
-        self.rect.y=280
+        self.rect.x= 400
+        self.rect.y=500
     
     #gestion du projectile
     def lauch_projectile(self) :
