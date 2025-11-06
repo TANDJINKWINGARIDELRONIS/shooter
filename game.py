@@ -1,5 +1,6 @@
 import pygame
 from player import player
+from monster import monster
 
 
 #creer une classe quit va reprensenter le jeu
@@ -8,7 +9,64 @@ class Game :
 
     def __init__(self) :
 
+        #Definir si le jeu a commence ou non
+        self.is_playing= False
         #generer le joueur
-        self.player=player()
+        self.all_player=pygame.sprite.Group()
+        self.player=player(self)
+        self.all_player.add(self.player)
+
+        #definir un groupe de monstre
+        self.all_monster= pygame.sprite.Group()
         self.pressed= {}
+     
+
+    def start(self) :
+        self.is_playing=True
+        self.spawn_monster()
+        self.spawn_monster()
+
+    def game_over(self) :
+        #remettre le jeux a neuf
+        self.all_monster=pygame.sprite.Group()
+        self.player.health=self.player.max_health
+        self.is_playing=False
+
+    def update(self,screen) :
+        #appliquer l'image du joueur(blit)
+        screen.blit(self.player.image,self.player.rect)
+
+        #actualiser la barre de vie du joueur
+        self.player.update_health_bar(screen)
+        #recuperer les projectile du joueurs et leur applique le deplacement
+        for projectile in self.player.all_projectile :
+            projectile.move()
+
+        #recuperer les monstre 
+        for monstre in self.all_monster :
+            monstre.forward()
+            monstre.update_health_bar(screen)
+
+        #appliquer l'ensemble des images du groupes de projectiles
+        self.player.all_projectile.draw(screen)
+    
+        #appliquer l'ensemble des images des groupes de monstres 
+        self.all_monster.draw(screen)
+
+
+        #verifier la direction que l'utilisateur souhaite prendre
+        if self.pressed.get(pygame.K_RIGHT) and self.player.rect.x + self.player.rect.width < screen.get_width():
+            self.player.move_right()
+        elif self.pressed.get(pygame.K_LEFT) and self.player.rect.x :
+            self.player.move_left()
+            
+
+    #Gestion des collision
+    def check_collision(self,sprite,group) :
+        return pygame.sprite.spritecollide(sprite,group,False,pygame.sprite.collide_mask)
+    
+
+    def spawn_monster(self) :
+        monstre=monster(self)
+        self.all_monster.add(monstre)
         

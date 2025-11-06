@@ -10,6 +10,20 @@ screen=pygame.display.set_mode((1080,720))
 #-----------------------------------------------charger l'image en fond d'ecran-------------------------- 
 background=pygame.image.load('assets/bg.jpg')
 
+
+#importer notre banniere
+banner=pygame.image.load('assets/banner.png')
+banner=pygame.transform.scale(banner, (500,500))
+banner_rect =banner.get_rect()
+banner_rect.x= screen.get_width()/4
+
+#charger le bouton pour lancer la partie
+play_button=pygame.image.load("assets/button.png")
+play_button=pygame.transform.scale(play_button,(400,150))
+play_button_rect=play_button.get_rect()
+play_button_rect.x=screen.get_width()/3.33
+play_button_rect.y=screen.get_height()/2
+
 #----------------------------------------------charger le jeu--------------------------------
 game=Game()
 
@@ -21,21 +35,15 @@ while running :
     #application de l'arriere plan 
     screen.blit(background,(0,-200))
 
-    #appliquer l'image du joueur(blit)
-    screen.blit(game.player.image,game.player.rect)
-
-    #recuperer les projectile du joueurs et leur applique le deplacement
-    for projectile in game.player.all_projectile :
-        projectile.move()
-
-    #appliquer l'ensemble des images du groupes de projectiles
-    game.player.all_projectile.draw(screen)
- 
-    #verifier la direction que l'utilisateur souhaite prendre
-    if game.pressed.get(pygame.K_RIGHT) and game.player.rect.x + game.player.rect.width < screen.get_width():
-        game.player.move_right()
-    elif game.pressed.get(pygame.K_LEFT) and game.player.rect.x :
-        game.player.move_left()
+    #verifier si le jeux a commence ou non
+    if  game.is_playing :
+        #declancher les instruction de la partie
+        game.update(screen)
+    #verifier si le jeux n'as pa commence
+    else :
+        #ajouter l'ecran de bienvenue
+        screen.blit(play_button,play_button_rect)
+        screen.blit(banner,banner_rect)
 
     #mise a jour de l'ecran
     pygame.display.flip()
@@ -56,4 +64,10 @@ while running :
                 game.player.lauch_projectile()
         elif event.type== pygame.KEYUP :
             game.pressed[event.key] =False
+
+        elif event.type == pygame.MOUSEBUTTONDOWN :
+            #verifier si la sourris est en colision avec le bouton play
+            if play_button_rect.collidepoint(event.pos) :
+                #mettre le jeu en mode lance
+                game.start()
         
