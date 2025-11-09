@@ -1,17 +1,16 @@
 import pygame
 import random
-
+import animation
 
 #creer la classe qui gere le monstre
 
-class monster (pygame.sprite.Sprite) :
+class monster (animation.AnimateSprite) :
     def __init__(self,game) :
-        super().__init__()
+        super().__init__("mummy")
         self.game=game
         self.health=100
         self.max_health=100
         self.attack=0.3
-        self.image=pygame.image.load('assets/mummy.png')
         self.rect=self.image.get_rect()
         self.rect.x=900 + random.randint(0,300)
         self.rect.y=540
@@ -29,7 +28,15 @@ class monster (pygame.sprite.Sprite) :
             self.rect.x=900 + random.randint(0,300)
             self.health=self.max_health
             self.velocity=random.randint(1,3)
+
+            #si la barre d'evenement est au max
+            if self.game.comet_event.is_full_loaded() :
+                self.game.all_monster.remove(self)
+                #appel de la methode pour essayer la pluie de comete
+                self.game.comet_event.attempt_fall()
     
+    def update_animation(self) :
+        self.animate()
     #gestion de la barre de sante
     def update_health_bar(self,surface):
 
