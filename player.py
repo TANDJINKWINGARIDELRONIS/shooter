@@ -1,6 +1,5 @@
 import pygame
 from projectile import projectile
-
 import animation
 
 #creer le joueur (utilisation de sprite qui permet de definir un elements capable de se deplacer)
@@ -31,8 +30,7 @@ class player (animation.AnimateSprite):
         #dessiner la barre de vie
         pygame.draw.rect(surface,(60,63,60),[self.rect.x + 50,self.rect.y +20,self.max_health,5])
         pygame.draw.rect(surface, (111,210,46),[self.rect.x + 50,self.rect.y +20,self.health,5])
-  
-    
+     
     #gestion du projectile
     def lauch_projectile(self) :
         #creer une instance qui gere le projectile
