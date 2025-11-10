@@ -2,7 +2,9 @@ import pygame
 pygame.init()
 from game import Game
 
-
+#definir une clock
+clock=pygame.time.Clock()
+FPS=80
 #-----------------------------------------Generer la fenetre du jeu---------------------------------- 
 pygame.display.set_caption("Shooter")
 screen=pygame.display.set_mode((1080,720))
@@ -61,7 +63,10 @@ while running :
 
             #detecter si la touche espace est active
             if event.key==pygame.K_SPACE :
-                game.player.lauch_projectile()
+                if game.is_playing :
+                    game.player.lauch_projectile()
+                else :
+                    game.start()
         elif event.type== pygame.KEYUP :
             game.pressed[event.key] =False
 
@@ -70,4 +75,7 @@ while running :
             if play_button_rect.collidepoint(event.pos) :
                 #mettre le jeu en mode lance
                 game.start()
-        
+                #joueur le son 
+                game.sound_manager.play('click')
+#fixer le nombre de FPS sur ma clock
+    clock.tick(FPS)        

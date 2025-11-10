@@ -7,24 +7,35 @@ import pygame
 class AnimateSprite(pygame.sprite.Sprite) :
 
     #definir les choses a faire a la creation de l'entite
-    def __init__(self,name):
+    def __init__(self,name,size=(200,200)):
         super().__init__()
+        self.size=size
         self.image=pygame.image.load(f'assets/{name}.png')
+        self.image=pygame.transform.scale(self.image,size)
         self.current_image=0
         self.images=animations.get(name)
+        self.animation=False
+
+    #definir une methode pour lancer l'animation
+    def start_animation(self) :
+        self.animation=True   
     #definir une methode pour animer le sprite
-    
-    def animate(self) :
-        #passer a l'image suivante 
-        self.current_image+=1
+    def animate(self,loop=False) :
+        if self.animation : #verifie si il y a animation 
+            #passer a l'image suivante 
+            self.current_image+=1
 
-        #verifier si ona atteint la fin de l'animation
-        if self.current_image>= len(self.images) :
-            self.current_image=0
+            #verifier si ona atteint la fin de l'animation
+            if self.current_image>= len(self.images) :
+                self.current_image=0
+                #verifier si l'anomation n'est pas en mode boucle
+                if loop is False :
+                    #desactiver l'animation
+                    self.animation=False
 
-        #modifier l'image de l'anim tion prcedente sur l'animation suivante
-        self.image=[self.current_image]    
-
+            #modifier l'image de l'anim tion prcedente sur l'animation suivante
+            self.image=self.images[self.current_image]    
+            self.image=pygame.transform.scale(self.image,self.size)
 
 #definir une fonction qui charge les images d'un sprite
 
@@ -47,5 +58,7 @@ def load_animation_image(sprite_name) :
 # dictionaire qui va contenir les images de chaque sprite
 
 animations={
-    'mummy' : load_animation_image('mummy')
+    'mummy' : load_animation_image('mummy'),
+    'player' : load_animation_image('player'),
+    'alien' : load_animation_image('alien')
 }
